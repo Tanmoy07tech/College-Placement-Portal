@@ -50,7 +50,7 @@ def register(request):
         for member in all_students:
             if collegeid == member.college_id:
                 
-                messages.error(request,'Account is already registered with this College Id')
+                messages.error(request,'Student with this College id already exists.Please Login using the same')
                 return render(request,'register.html')
 
             elif email == member.email:
