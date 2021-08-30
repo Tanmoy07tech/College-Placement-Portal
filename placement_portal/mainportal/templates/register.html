@@ -24,7 +24,19 @@
 <body>
 <!-- partial:index.partial.html -->
 <div class="form">
-      
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+  {% if messages %}
+  
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>{{message}}</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    {% endfor %}
+  
+  {% endif %}
       <ul class="tab-group">
         <li class="tab active"><a href="register">Sign Up</a></li>
         <li class="tab"><a href="login">Log In</a></li>
