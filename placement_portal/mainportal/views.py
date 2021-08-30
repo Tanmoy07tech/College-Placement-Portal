@@ -1,4 +1,5 @@
 from django.core.checks import messages
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from mainportal.models import Student
 from django.contrib import messages
@@ -13,26 +14,40 @@ def home(request):
 def login(request):
     if request.method=='POST':
         all_students=Student.objects.all()
-        email_log=request.POST.get('email')
-        print(email_log)
+        college_id=request.POST.get('collegeid')
+        
         password_log=request.POST.get('password')
+        
         for member in all_students:
-            if email_log==member.email and password_log==member.password:    
+            
+            if college_id==member.college_id and password_log==member.password:    
                 print('succesfully logged')
-                return render(request,'succesfulled.html')
-   
+                
+                return HttpResponse('Loggin Successfull')
+            elif college_id==member.college_id and password_log!=member.password:    
+                messages.error(request,'Invalid Password')
+
+                return render(request,'login.html')
+            else:
+                messages.error(request,'No registered College Id found please register first')
+
+                return render(request,'login.html')   
     return render(request,'login.html')
+            
+   
+    
 
 def register(request):
     if request.method=='POST':
         firstname=request.POST.get('firstname')
         lastname=request.POST.get('lastname')
         email=request.POST.get('email')
+        collegeid=request.POST.get('collegeid')
         password=request.POST.get('password')
-        s1=Student(first_name=firstname,last_name=lastname,email=email,password=password)
+        s1=Student(first_name=firstname,last_name=lastname,college_id=collegeid,email=email,password=password)
         s1.save()  
         print('Created a account')
-        messages.success(request,'Succesfully created account')
+        messages.success(request,'Succesfully created an account.Please Login')
         
         return render(request,'login.html')
          
@@ -40,6 +55,4 @@ def register(request):
     return render(request,'register.html')
 
 
-def succesfulled(request):
-    return render(request,'succesfulled.html')
 
