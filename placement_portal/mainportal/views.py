@@ -3,6 +3,10 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from mainportal.models import Student
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
+
+
 # Create your views here.
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
@@ -16,11 +20,14 @@ def login(request):
         all_students=Student.objects.all()
         college_id=request.POST.get('collegeid')
         
-        password_log=request.POST.get('password')
+        raw_pass=request.POST.get('password')
+       
+        
         verify=False
         for member in all_students:
+            password_log=check_password(raw_pass,encoded=member.password)
             
-            if college_id==member.college_id and password_log==member.password:    
+            if college_id==member.college_id and password_log:    
                 print('succesfully logged')
                 verify=True
                 return HttpResponse('Loggin Successfull')
@@ -45,7 +52,7 @@ def register(request):
         lastname=request.POST.get('lastname')
         email=request.POST.get('email')
         collegeid=request.POST.get('collegeid')
-        password=request.POST.get('password')
+        password=make_password(request.POST.get('password'))
         verify=False
         for member in all_students:
             if collegeid == member.college_id:
